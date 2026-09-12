@@ -22,7 +22,14 @@ function App() {
   const businessEmail = "Sankarehbakary7@gmail.com";
   const phoneNumber = "857-334-7041";
   const instagram = "Just_BigBaks";
-  const [form, setForm] = useState({ name: "", phone: "", package: "", message: "" });
+  const [form, setForm] = useState({
+  name: "",
+  phone: "",
+  email: "",
+  package: "",
+  dateTime: "",
+  message: ""
+});
 
   const packages = useMemo(() => [
     { title: "Single Session", detail: "1 Hour", price: "$65", tag: "Great Start" },
@@ -38,26 +45,33 @@ function App() {
   const submitBooking = async (e) => {
   e.preventDefault();
 
-  if (!form.name.trim() || !form.phone.trim() || !form.package) {
-    alert("Please add your name, phone number, and package before sending.");
-    return;
-  }
-
+  if (
+  !form.name.trim() ||
+  !form.phone.trim() ||
+  !form.email.trim() ||
+  !form.package ||
+  !form.dateTime
+) {
+  alert("Please add your name, phone number, email, package, and preferred date/time before sending.");
+  return;
+}
   try {
     const response = await fetch("https://formspree.io/f/mzebqlyj", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        name: form.name,
-        phone: form.phone,
-        package: form.package,
-        message: form.message,
-        _subject: "New BigBaks Fitness Booking Request",
-      }),
-    });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+  body: JSON.stringify({
+    name: form.name,
+    phone: form.phone,
+    email: form.email,
+    package: form.package,
+    dateTime: form.dateTime,
+    message: form.message,
+    _subject: "New BigBaks Fitness Booking Request",
+  }),
+});
 
     if (!response.ok) {
       throw new Error("Booking request failed");
@@ -66,11 +80,13 @@ function App() {
     alert("Booking request sent! BigBaks will contact you soon.");
 
     setForm({
-      name: "",
-      phone: "",
-      package: "",
-      message: "",
-    });
+  name: "",
+  phone: "",
+  email: "",
+  package: "",
+  dateTime: "",
+  message: "",
+});
   } catch (error) {
     alert("Something went wrong. Please try again.");
   }
@@ -120,8 +136,80 @@ function App() {
 
         <section className="section container why-grid"><div className="motivation-card"><div><div className="eyebrow">No Excuses</div><h2>Your Next Rep Matters</h2><p>Every session is a chance to become stronger than yesterday.</p></div></div><div><div className="eyebrow">Why Train With BigBaks?</div><h2>You bring the goal. BigBaks brings the push.</h2><p className="lead">Training is not just about lifting weights. It is about discipline, confidence, and showing up for yourself. BigBaks gives you the support and energy you need to keep going.</p><div className="feature-grid">{["Custom workouts","Accountability","Beginner friendly","Couples sessions"].map(x=><div className="feature" key={x}>{x}</div>)}</div></div></section>
 
-        <section id="booking" className="booking-section"><div className="container booking-grid"><div><div className="eyebrow light">Book Online</div><h2>Ready to start?</h2><p>Send your booking request and BigBaks will contact you to confirm your session time.</p><div className="contact-list"><a href={`tel:${phoneNumber.replace(/-/g,"")}`}><Icon name="phone"/>{phoneNumber}</a><a href={`mailto:${businessEmail}`}><Icon name="mail"/>{businessEmail}</a><a href={`https://instagram.com/${instagram}`} target="_blank" rel="noreferrer"><Icon name="instagram"/>@{instagram}</a></div></div><form className="booking-form" onSubmit={submitBooking}><h3>Request a Session</h3><input placeholder="Your name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} required/><input placeholder="Phone number" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} required/><select value={form.package} onChange={e=>setForm({...form,package:e.target.value})} required><option value="">Choose a package</option>{packages.map(pkg=><option key={pkg.title+pkg.detail}>{pkg.title} - {pkg.detail} - {pkg.price}</option>)}</select><textarea placeholder="Tell me your fitness goal" value={form.message} onChange={e=>setForm({...form,message:e.target.value})}/><button className="btn btn-dark" type="submit"><Icon name="calendar"/>Send Booking Request</button></form></div></section>
-      </main>
+        <<section id="booking" className="booking-section">
+  <div className="container booking-grid">
+
+    <div>
+      <div className="eyebrow light">Book Online</div>
+      <h2>Ready to start?</h2>
+      <p>
+        Send your booking request and BigBaks will contact you to confirm
+        your session time.
+      </p>
+    </div>
+
+    <form className="booking-form" onSubmit={submitBooking}>
+      <h3>Request a Session</h3>
+
+      <input
+        type="text"
+        placeholder="Your name"
+        value={form.name}
+        onChange={(e) => setForm({ ...form, name: e.target.value })}
+      />
+
+      <input
+        type="tel"
+        placeholder="Phone number"
+        value={form.phone}
+        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+      />
+
+      <input
+        type="email"
+        placeholder="Email address"
+        value={form.email}
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+      />
+
+      <select
+        value={form.package}
+        onChange={(e) => setForm({ ...form, package: e.target.value })}
+      >
+        <option value="">Choose a training package</option>
+
+        {packages.map((pkg) => (
+          <option
+            key={`${pkg.title}-${pkg.detail}`}
+            value={`${pkg.title} - ${pkg.detail} - ${pkg.price}`}
+          >
+            {pkg.title} - {pkg.detail} - {pkg.price}
+          </option>
+        ))}
+      </select>
+
+      <label>Preferred training date & time</label>
+
+      <input
+        type="datetime-local"
+        value={form.dateTime}
+        onChange={(e) => setForm({ ...form, dateTime: e.target.value })}
+      />
+
+      <textarea
+        placeholder="Goals / message"
+        value={form.message}
+        onChange={(e) => setForm({ ...form, message: e.target.value })}
+      />
+
+      <button className="btn btn-dark" type="submit">
+        <Icon name="calendar" />
+        Send Booking Request
+      </button>
+    </form>
+</div>
+</section>
+</main>
       <footer id="contact" className="footer"><div className="container"><h2>BigBaks Fitness</h2><p>Build Strength. Build Confidence.</p><p>Call/Text: {phoneNumber} • Email: {businessEmail} • Instagram: @{instagram}</p><small>© 2026 BigBaks Fitness. All rights reserved.</small></div></footer>
     </div>
   );
