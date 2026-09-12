@@ -21,7 +21,7 @@ function Icon({ name, className = "icon" }) {
 function App() {
   const businessEmail = "Sankarehbakary7@gmail.com";
   const phoneNumber = "857-334-7041";
-  const instagram = "Swagy_Baks";
+  const instagram = "Just_BigBaks";
   const [form, setForm] = useState({ name: "", phone: "", package: "", message: "" });
 
   const packages = useMemo(() => [
