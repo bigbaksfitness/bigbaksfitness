@@ -35,16 +35,46 @@ function App() {
 
   const scrollToSection = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
-  const submitBooking = (e) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.phone.trim() || !form.package) {
-      alert("Please add your name, phone number, and package before sending.");
-      return;
+  const submitBooking = async (e) => {
+  e.preventDefault();
+
+  if (!form.name.trim() || !form.phone.trim() || !form.package) {
+    alert("Please add your name, phone number, and package before sending.");
+    return;
+  }
+
+  try {
+    const response = await fetch("https://formspree.io/f/mzebqlyj", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: form.name,
+        phone: form.phone,
+        package: form.package,
+        message: form.message,
+        subject: "New BigBaks Fitness Booking Request",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Booking request failed");
     }
-    const subject = encodeURIComponent("New BigBaks Fitness Booking Request");
-    const body = encodeURIComponent(`Name: ${form.name}\nPhone: ${form.phone}\nPackage: ${form.package}\nGoal/Message: ${form.message || "No message added"}`);
-    window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
-  };
+
+    alert("Booking request sent! BigBaks will contact you soon.");
+
+    setForm({
+      name: "",
+      phone: "",
+      package: "",
+      message: "",
+    });
+  } catch (error) {
+    alert("Something went wrong. Please try again.");
+  }
+}; };
 
   return (
     <div className="site-shell">
