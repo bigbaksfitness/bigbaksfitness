@@ -55,7 +55,7 @@ function App() {
         phone: form.phone,
         package: form.package,
         message: form.message,
-        subject: "New BigBaks Fitness Booking Request",
+        _subject: "New BigBaks Fitness Booking Request",
       }),
     });
 
@@ -74,7 +74,7 @@ function App() {
   } catch (error) {
     alert("Something went wrong. Please try again.");
   }
-}; };
+};
 
   return (
     <div className="site-shell">
