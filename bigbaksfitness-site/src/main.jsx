@@ -136,7 +136,7 @@ function App() {
 
         <section className="section container why-grid"><div className="motivation-card"><div><div className="eyebrow">No Excuses</div><h2>Your Next Rep Matters</h2><p>Every session is a chance to become stronger than yesterday.</p></div></div><div><div className="eyebrow">Why Train With BigBaks?</div><h2>You bring the goal. BigBaks brings the push.</h2><p className="lead">Training is not just about lifting weights. It is about discipline, confidence, and showing up for yourself. BigBaks gives you the support and energy you need to keep going.</p><div className="feature-grid">{["Custom workouts","Accountability","Beginner friendly","Couples sessions"].map(x=><div className="feature" key={x}>{x}</div>)}</div></div></section>
 
-        <<section id="booking" className="booking-section">
+        <section id="booking" className="booking-section">
   <div className="container booking-grid">
 
     <div>
