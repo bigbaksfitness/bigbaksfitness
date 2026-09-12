@@ -29,7 +29,20 @@ function App() {
   package: "",
   dateTime: "",
   message: ""
-});
+}); const formatDateTime = (dateTime) => {
+  if (!dateTime) return "";
+
+  const date = new Date(dateTime);
+
+  return date.toLocaleString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  });
+};
 
   const packages = useMemo(() => [
     { title: "Single Session", detail: "1 Hour", price: "$65", tag: "Great Start" },
@@ -67,7 +80,7 @@ function App() {
     phone: form.phone,
     email: form.email,
     package: form.package,
-    dateTime: form.dateTime,
+    dateTime: formatDateTime(form.dateTime), 
     message: form.message,
     _subject: "New BigBaks Fitness Booking Request",
   }),
